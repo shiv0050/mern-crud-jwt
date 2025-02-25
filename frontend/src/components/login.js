@@ -1,19 +1,20 @@
 import React, {useState} from "react";
-
-
+import { login } from "../redux/userSlice";
+import { useDispatch } from "react-redux";
 const Login= props => {
     const initialUserState ={
         name:"",
         id:""
     }
+    const dispatch = useDispatch();
     const [user,setUser] =useState(initialUserState)
     const handleInputChange = event => {
         const {name,value}=event.target;
         setUser({...user,[name]: value})
     }
-    const login = () => {
-        props.login(user)
-        props.history.push('/')
+    const handleLogin = () => {
+      dispatch(login(user));
+      props.history.push('/')
     }
     return (
         <div className="submit-form">
@@ -44,7 +45,7 @@ const Login= props => {
               />
             </div>
     
-            <button onClick={login} className="btn btn-success">
+            <button onClick={()=>handleLogin()} className="btn btn-success">
               Login
             </button>
           </div>

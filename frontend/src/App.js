@@ -1,23 +1,21 @@
 import React,{useState} from "react";
 import { Switch, Route, Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
-
+import { useSelector, useDispatch } from "react-redux";
+import { logout } from "./redux/userSlice";
 import AddReview from "./components/add-review";
 import Restaurant from "./components/restaurants";
 import RestaurantsList from "./components/restaurants-list";
 import Login from "./components/login";
 
 function App() {
-  const [user, setUser] = useState(null);
+  const dispatch = useDispatch();
+const user = useSelector(state=>state.user);
+console.log(user,user['userId'],user['userName']);
 
-  async function login(user = null) {
-    setUser(user);
-  }
-
-  async function logout() {
-    setUser(null)
-  }
-
+const handleLogout = () => {
+  dispatch(logout());
+}
   return (
     <div>
       <nav className="navbar navbar-expand navbar-dark bg-dark">
@@ -31,9 +29,9 @@ function App() {
             </Link>
           </li>
           <li className="nav-item" >
-            { user ? (
-              <a onClick={logout} className="nav-link" style={{cursor:'pointer'}}>
-                Logout {user.name}
+            { user.userId!=null ? (
+              <a onClick={handleLogout} className="nav-link" style={{cursor:'pointer'}}>
+                Logout {user.userName}
               </a>
             ) : (            
             <Link to={"/login"} className="nav-link">
@@ -63,7 +61,7 @@ function App() {
           <Route 
             path="/login"
             render={(props) => (
-              <Login {...props} login={login} />
+              <Login {...props} />
             )}
           />
         </Switch>
